@@ -3,6 +3,7 @@ package tech.bhargav.employeemanager;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.bhargav.employeemanager.exception.UserNotFoundException;
 import tech.bhargav.employeemanager.model.Employee;
 import tech.bhargav.employeemanager.service.EmployeeService;
 
@@ -26,9 +27,17 @@ public class EmployeeController {
 
             // Return employee of specific id
             @GetMapping("/find/{id}")
-            public ResponseEntity<Employee> getAllEmployeeById(@PathVariable("id") Long id){
-                Employee employee = employeeService.findEmployeeById(id);
-                return new ResponseEntity<>(employee, HttpStatus.OK);
+            public ResponseEntity<?> getAllEmployeeById(@PathVariable("id") Long id){
+
+               try{
+                    Employee employee = employeeService.findEmployeeById(id);
+                    return new ResponseEntity<>(employee, HttpStatus.OK);
+                }
+               catch (UserNotFoundException ex){
+                   return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+               }
+
+
             }
 
             // POST mapping for adding new employee
@@ -40,16 +49,20 @@ public class EmployeeController {
 
 
             // put request for updating an employee
-            @PutMapping("/update")
-            public ResponseEntity<Employee> updateEmployee(Employee employee){
+            @PutMapping("/update/id")
+            public ResponseEntity<Employee> updateEmployee(@RequestBody Employee employee){
                 Employee updateEmployee = employeeService.updateEmployee(employee);
                 return new ResponseEntity<>(updateEmployee, HttpStatus.OK);
             }
 
-            @DeleteMapping("/delete{id}")
-            public ResponseEntity<?> deleteEmployee(@PathVariable("id") Long id) {
-                Employee deleteEmployee = employeeService.findEmployeeById(id);
-                return new ResponseEntity<>(HttpStatus.OK);
-
+            @DeleteMapping("/delete/{id}")
+            public ResponseEntity<?> deleteEmployeeById(@PathVariable("id") Long id) {
+                try {
+                    employeeService.deleteEmployeeById(id);
+                    return new ResponseEntity<>("Employee deleted with ID: " + id, HttpStatus.OK);
+                }
+                catch (UserNotFoundException ex){
+                    return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+                }
             }
 }

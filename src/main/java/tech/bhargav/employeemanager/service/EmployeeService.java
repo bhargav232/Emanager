@@ -1,5 +1,6 @@
 package tech.bhargav.employeemanager.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.bhargav.employeemanager.exception.UserNotFoundException;
@@ -12,7 +13,7 @@ import java.util.UUID;
 
 @Service
 public class EmployeeService {
-    private EmployeeRepo employeerepo;
+    private final EmployeeRepo employeerepo;
 
     @Autowired
     public EmployeeService( EmployeeRepo employeerepo){
@@ -35,8 +36,15 @@ public class EmployeeService {
 
     }
 
-    public void deleteEmployee(Long id){
-         employeerepo.deleteEmplopyeeById(id);
+
+    @Transactional
+    public void deleteEmployeeById(Long id){
+
+        if (!employeerepo.existsById(id)) {
+            System.out.println(id);
+            throw new UserNotFoundException("Employee not found with ID: " + id);
+        }
+         employeerepo.deleteEmployeeById(id);
     }
 
     public Employee findEmployeeById(Long id){

@@ -24,6 +24,10 @@ public class Employee implements Serializable {
 
 
 
+    public Employee() {
+        // You can leave it empty or initialize any default values here if needed
+    }
+
     public Employee(Long id, String name, String email, String phone, String jobTitle, String imageUrl, String employeeCode) {
         this.id = id;
         this.name = name;
