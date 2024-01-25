@@ -1,4 +1,9 @@
-HELP.md
+# .gitignore
+
+# ... (existing patterns)
+
+### Maven ###
+pom.xml
 target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
