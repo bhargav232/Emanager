@@ -1,3 +1,5 @@
+// Employee class
+
 package tech.bhargav.employeemanager.model;
 
 import jakarta.persistence.*;
