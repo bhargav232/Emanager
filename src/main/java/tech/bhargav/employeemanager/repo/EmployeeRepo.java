@@ -5,6 +5,9 @@ import tech.bhargav.employeemanager.model.Employee;
 
 import java.util.Optional;
 
+
+// adding repo for datalayer communication
+
 public interface EmployeeRepo extends JpaRepository<Employee, Long> {
 
     void deleteEmplopyeeById(Long id);
